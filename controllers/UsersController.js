@@ -1,4 +1,3 @@
-import hashPasswd from '../utils/hashpwd';
 import redisClient from '../utils/redis';
 import dbClient from '../utils/db';
 
@@ -18,8 +17,7 @@ export default class UsersController {
       return res.status(400).json({ error: 'Already exist' });
     }
 
-    const hashpwd = hashPasswd(password);
-    const addUser = await dbClient.db.collection('users').insertOne({ email, password: hashpwd });
+    const addUser = await dbClient.db.collection('users').insertOne({ email, password: password });
     const newUser = { id: addUser.ops[0]._id, email: addUser.ops[0].email };
     return res.status(201).json(newUser);
   }
